@@ -148,7 +148,16 @@ class FocusModePopup {
     document.getElementById('strictModeToggle').addEventListener('click', () => this.toggleStrict());
     document.getElementById('soundToggle').addEventListener('click', () => this.toggleSound());
     document.getElementById('emergencyStopBtn').addEventListener('click', () => this.emergencyStop());
-    document.getElementById('emergencyPhraseSet').addEventListener('input', (e) => this.setEmergencyPhrase(e.target.value));
+    document.getElementById('emergencyPhraseSet').addEventListener('input', (e) => {
+      this.validateEmergencyPhrase(e.target.value);
+    });
+    
+    document.getElementById('emergencyPhraseSet').addEventListener('blur', (e) => {
+      if (e.target.value.length >= 8) {
+        this.emergencyPhrase = e.target.value;
+        this.saveSettings();
+      }
+    });
     
     document.querySelectorAll('input[name="soundType"]').forEach(radio => {
       radio.addEventListener('change', () => this.handleSoundTypeChange());
@@ -204,8 +213,22 @@ class FocusModePopup {
   }
 
   toggleStrict() {
+    // Prevent changes during active session
+    if (this.isSessionActive) return;
+    
     this.strictMode = !this.strictMode;
     document.getElementById('strictModeToggle').classList.toggle('active', this.strictMode);
+    
+    // Show/hide emergency phrase section
+    const emergencySection = document.getElementById('emergencyPhraseSection');
+    emergencySection.style.display = this.strictMode ? 'block' : 'none';
+    
+    // Clear emergency phrase if strict mode disabled
+    if (!this.strictMode) {
+      this.emergencyPhrase = '';
+      document.getElementById('emergencyPhraseSet').value = '';
+    }
+    
     this.saveSettings();
     this.updateUI();
   }
@@ -233,6 +256,37 @@ class FocusModePopup {
     reader.readAsDataURL(file);
   }
 
+  validateEmergencyPhrase(phrase) {
+    const strengthDiv = document.getElementById('phraseStrength');
+    
+    if (phrase.length < 8) {
+      strengthDiv.textContent = `Too short (${phrase.length}/8 characters)`;
+      strengthDiv.style.color = '#ff6b6b';
+      return false;
+    }
+    
+    const hasUpper = /[A-Z]/.test(phrase);
+    const hasLower = /[a-z]/.test(phrase);
+    const hasNumber = /\d/.test(phrase);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(phrase);
+    
+    const strength = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+    
+    if (strength < 2) {
+      strengthDiv.textContent = 'Weak - Add uppercase, numbers, or symbols';
+      strengthDiv.style.color = '#ffa726';
+      return false;
+    } else if (strength < 3) {
+      strengthDiv.textContent = 'Good - Consider adding more variety';
+      strengthDiv.style.color = '#66bb6a';
+      return true;
+    } else {
+      strengthDiv.textContent = 'Strong phrase ✓';
+      strengthDiv.style.color = '#4caf50';
+      return true;
+    }
+  }
+
   setEmergencyPhrase(phrase) {
     this.emergencyPhrase = phrase;
     this.saveSettings();
@@ -252,6 +306,12 @@ class FocusModePopup {
     
     if (validSites.length === 0) {
       alert('Please add at least one website to your whitelist');
+      return;
+    }
+    
+    // Validate emergency phrase for strict mode
+    if (this.strictMode && (!this.emergencyPhrase || this.emergencyPhrase.length < 8)) {
+      alert('Strict mode requires a strong emergency phrase (8+ characters)');
       return;
     }
     
@@ -411,6 +471,20 @@ class FocusModePopup {
     const button = document.getElementById('mainButton');
     const statusSection = document.getElementById('sessionStatusSection');
     const emergencyStop = document.getElementById('emergencyStop');
+    const strictToggle = document.getElementById('strictModeToggle');
+    const emergencySection = document.getElementById('emergencyPhraseSection');
+    
+    // Show/hide emergency phrase section based on strict mode
+    emergencySection.style.display = this.strictMode ? 'block' : 'none';
+    
+    // Disable strict mode toggle during active session
+    if (this.isSessionActive) {
+      strictToggle.style.opacity = '0.5';
+      strictToggle.style.pointerEvents = 'none';
+    } else {
+      strictToggle.style.opacity = '1';
+      strictToggle.style.pointerEvents = 'auto';
+    }
     
     if (this.isSessionActive) {
       statusSection.style.display = 'block';
