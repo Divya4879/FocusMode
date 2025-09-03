@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Focus Mode",
-  "version": "1.1.9",
+  "version": "1.2.1",
   "description": "Block distracting websites during focus sessions",
   "icons": {
     "16": "icon16.png",
