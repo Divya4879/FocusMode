@@ -93,25 +93,33 @@ class FocusModeBackground {
 
   async startAudio() {
     try {
-      // Check if offscreen document already exists
-      const existingContexts = await chrome.runtime.getContexts({
-        contextTypes: ['OFFSCREEN_DOCUMENT']
-      });
-      
-      if (existingContexts.length === 0) {
-        await chrome.offscreen.createDocument({
-          url: 'offscreen.html',
-          reasons: ['AUDIO_PLAYBACK'],
-          justification: 'Play pomodoro sounds during focus session'
-        });
+      // Close any existing offscreen document first
+      try {
+        await chrome.offscreen.closeDocument();
+      } catch (e) {
+        // No existing document, continue
       }
       
-      const data = await chrome.storage.local.get(['customSoundData']);
-      
-      chrome.runtime.sendMessage({
-        action: 'startAudio',
-        customSoundData: data.customSoundData
+      // Create new offscreen document
+      await chrome.offscreen.createDocument({
+        url: 'offscreen.html',
+        reasons: ['AUDIO_PLAYBACK'],
+        justification: 'Play pomodoro sounds during focus session'
       });
+      
+      // Wait for offscreen document to load
+      setTimeout(async () => {
+        try {
+          const data = await chrome.storage.local.get(['customSoundData']);
+          
+          chrome.runtime.sendMessage({
+            action: 'startAudio',
+            customSoundData: data.customSoundData
+          });
+        } catch (e) {
+          console.log('Audio message failed:', e);
+        }
+      }, 100);
       
     } catch (error) {
       console.error('Failed to create audio offscreen:', error);
