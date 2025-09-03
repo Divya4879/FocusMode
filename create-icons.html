@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head><title>Create Icons</title></head>
+<body>
+<canvas id="canvas" width="128" height="128"></canvas>
+<script>
+function createIcon(size) {
+  const canvas = document.getElementById('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  
+  const center = size / 2;
+  const radius = size / 2 - 4;
+  
+  // Background circle with gradient
+  const gradient = ctx.createLinearGradient(0, 0, size, size);
+  gradient.addColorStop(0, '#1e3c72');
+  gradient.addColorStop(1, '#2a5298');
+  
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.arc(center, center, radius, 0, 2 * Math.PI);
+  ctx.fill();
+  
+  // White border
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  
+  // Timer arc (green)
+  const timerGradient = ctx.createLinearGradient(0, 0, size, size);
+  timerGradient.addColorStop(0, '#2ed573');
+  timerGradient.addColorStop(1, '#17c0eb');
+  
+  ctx.strokeStyle = timerGradient;
+  ctx.lineWidth = Math.max(3, size / 20);
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(center, center, radius - 8, -Math.PI/2, Math.PI, false);
+  ctx.stroke();
+  
+  // Clock hands
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = Math.max(2, size / 40);
+  ctx.lineCap = 'round';
+  
+  // Hour hand
+  ctx.beginPath();
+  ctx.moveTo(center, center);
+  ctx.lineTo(center, center - radius/2);
+  ctx.stroke();
+  
+  // Minute hand
+  ctx.lineWidth = Math.max(1, size / 60);
+  ctx.beginPath();
+  ctx.moveTo(center, center);
+  ctx.lineTo(center + radius/3, center);
+  ctx.stroke();
+  
+  // Center dot
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(center, center, Math.max(2, size / 30), 0, 2 * Math.PI);
+  ctx.fill();
+  
+  return canvas.toDataURL('image/png');
+}
+
+// Create and download icons
+const sizes = [16, 48, 128];
+sizes.forEach(size => {
+  const dataUrl = createIcon(size);
+  const link = document.createElement('a');
+  link.download = `icon${size}.png`;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+</script>
+</body>
+</html>
