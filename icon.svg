@@ -1,0 +1,28 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72"/>
+      <stop offset="100%" style="stop-color:#2a5298"/>
+    </linearGradient>
+    <linearGradient id="timer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ed573"/>
+      <stop offset="100%" style="stop-color:#17c0eb"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bg)" stroke="#fff" stroke-width="2"/>
+  
+  <!-- Timer circle -->
+  <circle cx="64" cy="64" r="45" fill="none" stroke="url(#timer)" stroke-width="6" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="70" transform="rotate(-90 64 64)"/>
+  
+  <!-- Clock hands -->
+  <line x1="64" y1="64" x2="64" y2="35" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="64" y1="64" x2="85" y2="64" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Center dot -->
+  <circle cx="64" cy="64" r="4" fill="#fff"/>
+  
+  <!-- Focus text -->
+  <text x="64" y="105" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">FOCUS</text>
+</svg>
