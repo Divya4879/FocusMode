@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-  <!-- Target emoji style -->
+  <!-- Target emoji 🎯 -->
   <!-- Outer red ring -->
-  <circle cx="64" cy="64" r="58" fill="#E53E3E" stroke="#C53030" stroke-width="2"/>
+  <circle cx="64" cy="64" r="60" fill="#E53E3E"/>
   <circle cx="64" cy="64" r="48" fill="#FFFFFF"/>
   
   <!-- Second red ring -->
-  <circle cx="64" cy="64" r="38" fill="#E53E3E"/>
-  <circle cx="64" cy="64" r="28" fill="#FFFFFF"/>
+  <circle cx="64" cy="64" r="36" fill="#E53E3E"/>
+  <circle cx="64" cy="64" r="24" fill="#FFFFFF"/>
   
   <!-- Inner red ring -->
-  <circle cx="64" cy="64" r="18" fill="#E53E3E"/>
-  <circle cx="64" cy="64" r="8" fill="#FFFFFF"/>
+  <circle cx="64" cy="64" r="12" fill="#E53E3E"/>
   
-  <!-- Center bullseye -->
-  <circle cx="64" cy="64" r="4" fill="#C53030"/>
+  <!-- Center white dot -->
+  <circle cx="64" cy="64" r="4" fill="#FFFFFF"/>
 </svg>
