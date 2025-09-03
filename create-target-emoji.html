@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🎯 Target Emoji Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .icon { background: white; padding: 20px; margin: 20px; border-radius: 8px; text-align: center; display: inline-block; }
+        canvas { border: 1px solid #ccc; }
+        button { background: #E53E3E; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🎯 Target Emoji Icons for Extension</h1>
+    
+    <div class="icon">
+        <h3>16x16</h3>
+        <canvas id="icon16" width="16" height="16"></canvas>
+        <br><button onclick="download('icon16', 'icon16.png')">Download</button>
+    </div>
+    
+    <div class="icon">
+        <h3>48x48</h3>
+        <canvas id="icon48" width="48" height="48"></canvas>
+        <br><button onclick="download('icon48', 'icon48.png')">Download</button>
+    </div>
+    
+    <div class="icon">
+        <h3>128x128</h3>
+        <canvas id="icon128" width="128" height="128"></canvas>
+        <br><button onclick="download('icon128', 'icon128.png')">Download</button>
+    </div>
+
+    <script>
+        function drawTarget(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const center = size / 2;
+            
+            // Outer red circle
+            ctx.fillStyle = '#E53E3E';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.47, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // First white ring
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.375, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Second red ring
+            ctx.fillStyle = '#E53E3E';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.28, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Second white ring
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.19, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Inner red circle
+            ctx.fillStyle = '#E53E3E';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.09, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Center white dot
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(center, center, size * 0.03, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        function download(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Draw all target emojis
+        drawTarget(document.getElementById('icon16'), 16);
+        drawTarget(document.getElementById('icon48'), 48);
+        drawTarget(document.getElementById('icon128'), 128);
+    </script>
+</body>
+</html>
