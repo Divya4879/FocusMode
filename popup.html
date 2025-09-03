@@ -346,9 +346,10 @@
     </div>
   </div>
   
-  <div class="section">
-    <h3>Emergency Phrase</h3>
-    <input type="text" class="emergency-input" id="emergencyPhraseSet" placeholder="Set emergency stop phrase">
+  <div class="section" id="emergencyPhraseSection" style="display: none;">
+    <h3>Emergency Phrase (8+ characters)</h3>
+    <input type="password" class="emergency-input" id="emergencyPhraseSet" placeholder="Strong 8+ character phrase" maxlength="20">
+    <div id="phraseStrength" style="font-size: 11px; margin-top: 5px; opacity: 0.8;"></div>
   </div>
   
   <button class="main-button start-btn" id="mainButton">Start Focus Session</button>
