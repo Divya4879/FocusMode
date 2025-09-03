@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      min-height: 400px;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .section h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .whitelist-container {
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    
+    .site-input {
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    
+    .site-input input {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+    
+    .remove-btn {
+      margin-left: 8px;
+      background: #ff4757;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      padding: 6px 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .add-site-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px dashed rgba(255, 255, 255, 0.5);
+      color: white;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    
+    .add-site-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .session-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    select, input[type="file"] {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+    
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .toggle.active {
+      background: #2ed573;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    
+    .toggle.active .toggle-slider {
+      transform: translateX(26px);
+    }
+    
+    .main-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 15px;
+    }
+    
+    .start-btn {
+      background: #2ed573;
+      color: white;
+    }
+    
+    .stop-btn {
+      background: #ff4757;
+      color: white;
+    }
+    
+    .disabled-btn {
+      background: #666;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .session-status {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 15px 0;
+    }
+    
+    .emergency-stop {
+      margin-top: 10px;
+    }
+    
+    .emergency-input {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .emergency-btn {
+      width: 100%;
+      padding: 8px;
+      background: #ff6b6b;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .sound-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .sound-option {
+      flex: 1;
+    }
+    
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+    
+    .custom-sound {
+      margin-top: 8px;
+    }
+    
+    .timer-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+      background: radial-gradient(circle, rgba(46, 213, 115, 0.1), transparent);
+      border-radius: 50%;
+      padding: 20px;
+    }
+    
+    .circular-timer {
+      width: 200px;
+      height: 200px;
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 20px rgba(46, 213, 115, 0.4));
+    }
+    
+    .timer-content {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .timer-text {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2ed573;
+      text-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
+      margin-bottom: 5px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .timer-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 500;
+    }
+    
+    .progress-bg {
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 8;
+    }
+    
+    .progress-fill {
+      stroke: #2ed573;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+      filter: drop-shadow(0 0 5px rgba(46, 213, 115, 0.8));
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⏳ Focus Mode</h1>
+  </div>
+  
+  <div class="section">
+    <h3>Allowed Websites (Max 10)</h3>
+    <div class="whitelist-container" id="whitelistContainer">
+    </div>
+    <button class="add-site-btn" id="addSiteBtn">+ Add Website</button>
+  </div>
+  
+  <div class="section">
+    <h3>Session Settings</h3>
+    <div class="session-controls">
+      <select id="sessionDuration">
+        <option value="60">1 Hour</option>
+        <option value="90">1.5 Hours</option>
+        <option value="120">2 Hours</option>
+      </select>
+    </div>
+    
+    <div class="toggle-container">
+      <span>Strict Mode</span>
+      <div class="toggle" id="strictModeToggle">
+        <div class="toggle-slider"></div>
+      </div>
+    </div>
+    
+    <div class="toggle-container">
+      <span>Sound During Session</span>
+      <div class="toggle" id="soundToggle">
+        <div class="toggle-slider"></div>
+      </div>
+    </div>
+    
+    <div class="sound-controls" id="soundControls" style="display: none;">
+      <div class="sound-option">
+        <input type="radio" id="defaultSound" name="soundType" value="default" checked>
+        <label for="defaultSound">Default</label>
+      </div>
+      <div class="sound-option">
+        <input type="radio" id="customSound" name="soundType" value="custom">
+        <label for="customSound">Custom MP3</label>
+      </div>
+    </div>
+    
+    <div class="custom-sound" id="customSoundUpload" style="display: none;">
+      <input type="file" id="soundFile" accept="audio/mp3,audio/mpeg">
+    </div>
+  </div>
+  
+  <div class="section" id="sessionStatusSection" style="display: none;">
+    <div class="timer-container">
+      <svg class="circular-timer" width="200" height="200">
+        <circle cx="100" cy="100" r="85" class="progress-bg" fill="none"/>
+        <circle id="progressCircle" cx="100" cy="100" r="85" class="progress-fill"
+                fill="none" stroke-dasharray="534" stroke-dashoffset="534" 
+                transform="rotate(-90 100 100)"/>
+      </svg>
+      <div class="timer-content">
+        <div class="timer-text" id="timerText">00:00</div>
+        <div class="timer-label">remaining</div>
+      </div>
+    </div>
+    <div class="session-status" id="sessionStatus"></div>
+    <div class="emergency-stop" id="emergencyStop" style="display: none;">
+      <p style="font-size: 12px; margin-bottom: 10px; opacity: 0.8;" id="emergencyQuestion">Loading challenge...</p>
+      <input type="text" class="emergency-input" id="emergencyPhrase" placeholder="Enter emergency phrase">
+      <input type="text" class="emergency-input" id="logicAnswer" placeholder="Answer: yes or no" style="margin-top: 5px;">
+      <button class="emergency-btn" id="emergencyStopBtn">Emergency Stop</button>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h3>Emergency Phrase</h3>
+    <input type="text" class="emergency-input" id="emergencyPhraseSet" placeholder="Set emergency stop phrase">
+  </div>
+  
+  <button class="main-button start-btn" id="mainButton">Start Focus Session</button>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
